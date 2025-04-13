@@ -1,0 +1,92 @@
+main/resources/templates/recommendation.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/default}">
+
+<head>
+    <title>Crop Recommendations</title>
+    <th:block layout:fragment="css">
+        <style>
+            .recommendation-card {
+                transition: transform 0.3s;
+                margin-bottom: 1.5rem;
+            }
+            .recommendation-card:hover {
+                transform: translateY(-5px);
+            }
+            .yield-badge {
+                font-size: 1.1rem;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <h1 class="mb-4 text-center">Your Crop Recommendations</h1>
+        
+        <!-- Query summary -->
+        <div class="alert alert-info mb-4">
+            <h5>Search parameters:</h5>
+            <div class="row">
+                <div class="col-md-3"><strong>State:</strong> <span th:text="${request.stateName}"></span></div>
+                <div class="col-md-3"><strong>District:</strong> <span th:text="${request.districtName}"></span></div>
+                <div class="col-md-3"><strong>Season:</strong> <span th:text="${request.seasonName}"></span></div>
+                <div class="col-md-3"><strong>Area:</strong> <span th:text="${request.area}"></span> hectares</div>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div class="row">
+            <div th:if="${#lists.isEmpty(recommendations)}" class="col-12">
+                <div class="alert alert-warning">
+                    No crop recommendations found for the given parameters. Please try different search criteria.
+                </div>
+            </div>
+            
+            <div th:each="crop, cropStat : ${recommendations}" class="col-md-4">
+                <div class="card recommendation-card h-100">
+                    <div class="card-header" th:classappend="${cropStat.index == 0 ? 'bg-success text-white' : ''}">
+                        <h4 th:text="${crop.cropName}" class="mb-0"></h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <span class="badge bg-primary yield-badge">
+                                Predicted Yield: <span th:text="${#numbers.formatDecimal(crop.yield, 1, 2)}"></span> tonnes/hectare
+                            </span>
+                        </div>
+                        
+                        <p th:if="${cropStat.index == 0}" class="text-success">
+                            <i class="bi bi-star-fill"></i> Top recommendation for your region
+                        </p>
+                        
+                        <div class="text-center mt-3">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p><strong>Estimated Production:</strong></p>
+                                    <h5 th:text="${#numbers.formatDecimal(crop.yield * request.area, 1, 2) + ' tonnes'}"></h5>
+                                </div>
+                                <div class="col-6">
+                                    <p><strong>Confidence:</strong></p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar" 
+                                             th:style="'width: ' + ${100 - cropStat.index * 10} + '%'" 
+                                             th:attr="aria-valuenow=${100 - cropStat.index * 10}" 
+                                             aria-valuemin="0" aria-valuemax="100">
+                                            <span th:text="${100 - cropStat.index * 10} + '%'"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Back button -->
+        <div class="text-center mt-4">
+            <a th:href="@{/}" class="btn btn-secondary">Try Another Prediction</a>
+        </div>
+    </div>
+</body>

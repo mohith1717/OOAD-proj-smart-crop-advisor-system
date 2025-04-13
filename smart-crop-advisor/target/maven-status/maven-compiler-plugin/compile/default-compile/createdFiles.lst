@@ -1,0 +1,9 @@
+com/cropadviser/SmartCropAdvisorApplication.class
+com/cropadviser/controller/CropController.class
+com/cropadviser/service/PredictionApiService$1.class
+com/cropadviser/model/PredictionRequest.class
+com/cropadviser/service/CropRecommendationService.class
+com/cropadviser/model/CropRecommendation.class
+com/cropadviser/util/ModelLoader.class
+com/cropadviser/util/ModelLoader$1.class
+com/cropadviser/service/PredictionApiService.class

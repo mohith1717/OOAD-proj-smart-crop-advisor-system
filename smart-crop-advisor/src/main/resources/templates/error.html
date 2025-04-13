@@ -1,0 +1,36 @@
+resources/templates/error.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/default}">
+
+<head>
+    <title>Error</title>
+    <th:block layout:fragment="css">
+        <style>
+            .error-container {
+                text-align: center;
+                padding: 40px 0;
+            }
+            .error-code {
+                font-size: 120px;
+                font-weight: bold;
+                color: #dc3545;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <div class="error-container">
+            <div class="error-code" th:text="${status ?: '500'}"></div>
+            <h2 th:text="${error ?: 'Internal Server Error'}"></h2>
+            <p th:text="${message ?: 'Something went wrong. Please try again later.'}"></p>
+            
+            <div class="mt-4">
+                <a th:href="@{/}" class="btn btn-primary">Return to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
